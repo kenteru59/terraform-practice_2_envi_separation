@@ -5,7 +5,7 @@ provider "aws" {
 # TerraformのstateファイルをS3に保存する
 terraform {
   backend "s3" {
-    key            = "workspace-example/terraform.tfstate"
+    key = "workspace-example/terraform.tfstate"
   }
 }
 
@@ -28,7 +28,7 @@ data "aws_subnets" "default" {
 }
 
 resource "aws_instance" "example" {
-  ami = "ami-0a290015b99140cd1"
-  instance_type = "t2.micro"
-  subnet_id = data.aws_subnets.default.ids[0]
+  ami           = "ami-0a290015b99140cd1"
+  instance_type = terraform.workspace == "default" ? "t2.medium" : "t2.micro"
+  subnet_id     = data.aws_subnets.default.ids[0]
 }
